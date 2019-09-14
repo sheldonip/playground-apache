@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: playground-apache
+  labels:
+    app: playground-apache
+    type: web
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: playground-apache
+        type: web
+    spec:
+      containers:
+      - name: playground-apache
+        image: httpd:2.4
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: apache-persistent-storage
+          mountPath: /usr/local/apache2/htdocs
+      volumes:
+      - name: apache-persistent-storage
+        hostPath: 
+          path: <APACHE-PERSISTENT-STORAGE>

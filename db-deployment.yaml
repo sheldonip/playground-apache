@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playground-postgres
+  labels:
+    app: playground-postgres
+    type: db
+spec:
+  selector:
+    matchLabels:
+      app: playground-postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: playground-postgres
+        type: db
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:latest
+        ports:
+          - name: postgres
+            containerPort: 5432
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: playground-postgres-secret
+                key: username
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: playground-postgres-secret
+                key: password

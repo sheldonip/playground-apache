@@ -19,10 +19,10 @@ spec:
       containers:
       - name: postgres
         image: postgres:latest
+        imagePullPolicy: IfNotPresent
         ports:
           - name: postgres
             containerPort: 5432
-        imagePullPolicy: IfNotPresent
         env:
           - name: POSTGRES_USER
             valueFrom:
@@ -34,3 +34,10 @@ spec:
               secretKeyRef:
                 name: playground-postgres-secret
                 key: password
+        volumeMounts:
+          - name: postgres-volume
+            mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgres-volume
+        persistentVolumeClaim:
+          claimName: playground-postgres-data-pvc
